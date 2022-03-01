@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { MainDiv , WrapperDiv ,Input,Wrapper , Label, Button} from "../components/style";
+import { MainDiv , WrapperDiv ,Input,Wrapper , Label, Button, ValidateP} from "../components/style";
 import { validEmail,validUsername, validPassword } from "../components/validation";
 const Dashboard = () => {
     const navigate = useNavigate();
@@ -11,9 +11,15 @@ const Dashboard = () => {
             password:""
         }
     );
-    const [usernameError,setUsernameError] = useState(false);
-    const [emailError,setEmailError] = useState(false);
-    const [passwordError,setPasswordError] = useState(false);
+//    const[error,setError] = useState({
+//        usernameError:"false",
+//        emailError:"false",
+//        passwordError:"false"
+//    })
+const[usernameError,setUsernameError] = useState(false)
+const[emailError,setEmailError] = useState(false)
+const[passwordError,setPasswordError] = useState(false)
+const[disabled,setDisabled] = useState(true)
    
 const handleChange = (e) => {
     setUserData({
@@ -21,6 +27,7 @@ const handleChange = (e) => {
 
         [e.target.name]:e.target.value
     })
+    setDisabled(e.target.value === "" || usernameError === true || emailError === true || passwordError === true)
 }
 
 const handleUsernameFocus = () => {
@@ -36,11 +43,10 @@ const handlePasswordFocus = () => {
 
 var data = "Data Passed Successfully!";
 const handleSubmit = () => {
-if(!validUsername.test(userData.username)){
+
+if(!validUsername.test(userData.username) && !validEmail.test(userData.email) && !validPassword.test(userData.password)){
     setUsernameError(true)
-}else if(!validEmail.test(userData.email)){
     setEmailError(true)
-}else if(!validPassword.test(userData.password)){
     setPasswordError(true)
 }
 else{
@@ -57,23 +63,23 @@ else{
             <MainDiv>
              <Label for="username">User Name</Label>   
             <Input type="text" placeholder="UserName" name="username" onChange={handleChange} onFocus={handleUsernameFocus}/>
-            {usernameError && <p>username should not be empty!</p>}
+            {usernameError && <ValidateP>username invalid!</ValidateP>}
             </MainDiv>
             
             <MainDiv>
              <Label for="email">Email</Label>   
             <Input type="email" placeholder="Email" name="email" onChange={handleChange} onFocus={handleEmailFocus}/>
-            {emailError && <p>email should not be empty!</p>}
+            {emailError && <ValidateP>email invalid!</ValidateP>}
             </MainDiv>
             
             <MainDiv>
              <Label for="password">Password</Label>   
             <Input type="password" placeholder="Password" name="password" onChange={handleChange} onFocus={handlePasswordFocus}/>
-            {passwordError && <p>password should not be empty!</p>}
+            {passwordError && <ValidateP>password invalid!</ValidateP>}
             </MainDiv>
             
             <MainDiv>
-                <Button type="submit" onClick={handleSubmit}>Submit</Button>
+                <Button type="submit" onClick={handleSubmit} disabled={disabled}>Submit</Button>
             </MainDiv>
         </WrapperDiv>
         </Wrapper>

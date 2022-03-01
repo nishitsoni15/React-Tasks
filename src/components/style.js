@@ -33,8 +33,17 @@ export const Label = styled.label`
 export const Button = styled.button`
     width:220px;
     padding:10px;
-    background-color:blue;
     color:white;
     font-weight:bold;
     border:none;
+    ${props =>
+        props.disabled ? css`
+        background:grey;
+        `: css`
+        background:blue;
+        `}
+`
+export const ValidateP = styled.p`
+    color:red;
+    font-weight:10px;
 `
